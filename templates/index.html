@@ -14,5 +14,9 @@
         <h2>Uploaded Image:</h2>
         <img src="{{ file_url }}" alt="Uploaded Image" style="max-width: 500px;">
     {% endif %}
+    {% if prediction %}
+        <h5>Predicted Gender : {{ prediction['gender'] }}</h5>
+        <h5>Predicted Age : {{ prediction['age'] }}</h5>
+    {% endif %}
 </body>
 </html>
