@@ -2,33 +2,85 @@
 <html>
 <head>
     <title>Upload Image</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: auto;
+            max-width: 800px;
+        }
+        form {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        input[type="submit"] {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        img.uploaded-img {
+            max-width: 100%;
+        }
+        .predictions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        table {
+            margin: 0;
+        }
+        table img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
-    <h1>Upload an Image</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        {{ form.photo.label }} {{ form.photo() }}
-        {{ form.submit() }}
-    </form>
-    {% if file_url %}
-        <h2>Uploaded Image:</h2>
-        <img src="{{ file_url }}" alt="Uploaded Image" style="max-width: 500px;">
-    {% endif %}
-    {% if prediction %}
-        <h2>Detected Face:</h2>
-        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse;">
-            <tr>
-                <td rowspan="2" style="width: 100px; text-align: center; vertical-align: middle;">
-                    <img src="{{ prediction['faces'] }}" alt="Detected Face" style="width: 100px; border-radius: 8px;">
-                </td>
-                <td><strong>Predicted Gender:</strong> {{ prediction['gender'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Predicted Age:</strong> {{ prediction['age'] }}</td>
-            </tr>
-        </table>
-      {% endif %}
-
-  
+    <div class="container">
+        <h1>Upload an Image</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{ form.photo.label }}<br>
+            {{ form.photo() }}<br>
+            {{ form.submit() }}
+        </form>
+        {% if file_url %}
+            <h2>Uploaded Image</h2>
+            <img src="{{ file_url }}" alt="Uploaded Image" class="uploaded-img" style="max-width: 400px;">
+        {% endif %}
+        {% if predictions %}
+            <h2>Detected Faces</h2>
+            <div class="predictions">
+                {% for prediction in predictions %}
+                    <table border="1">
+                        <tr>
+                            <td rowspan="2">
+                                <img src="{{ prediction.face }}" alt="Detected Face">
+                            </td>
+                            <td>Gender: {{ prediction.gender }}</td>
+                        </tr>
+                        <tr>
+                            <td>Age: {{ prediction.age }}</td>
+                        </tr>
+                    </table>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
