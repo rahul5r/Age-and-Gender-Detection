@@ -15,8 +15,20 @@
         <img src="{{ file_url }}" alt="Uploaded Image" style="max-width: 500px;">
     {% endif %}
     {% if prediction %}
-        <h5>Predicted Gender : {{ prediction['gender'] }}</h5>
-        <h5>Predicted Age : {{ prediction['age'] }}</h5>
-    {% endif %}
+        <h2>Detected Face:</h2>
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse;">
+            <tr>
+                <td rowspan="2" style="width: 100px; text-align: center; vertical-align: middle;">
+                    <img src="{{ prediction['faces'] }}" alt="Detected Face" style="width: 100px; border-radius: 8px;">
+                </td>
+                <td><strong>Predicted Gender:</strong> {{ prediction['gender'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Predicted Age:</strong> {{ prediction['age'] }}</td>
+            </tr>
+        </table>
+      {% endif %}
+
+  
 </body>
 </html>

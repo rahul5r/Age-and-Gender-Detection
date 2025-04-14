@@ -4,14 +4,17 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import SubmitField
 from werkzeug.utils import secure_filename
 import os
+import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "qwerty"
 app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
+app.config['UPLOADED_FACES_DEST'] = 'faces'
 
 model = load_model('Age_Gender_Classification_model.h5')
 
@@ -32,19 +35,42 @@ class UploadForm(FlaskForm):
 def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
 
+
+@app.route('/faces/<filename>')
+def get_face_file(filename):
+    return send_from_directory(app.config['UPLOADED_FACES_DEST'], filename)
+
+def crop_image(image_path):
+    img = cv2.imread(image_path)
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+
+    for (x, y, w, h) in faces:
+        face_crop_bgr = img[y:y+h, x:x+w]
+        face_crop_rgb = cv2.cvtColor(face_crop_bgr, cv2.COLOR_BGR2RGB)
+        save_path = "faces/"+image_path.split('/')[-1]
+        cv2.imwrite(save_path, face_crop_rgb)
+        
+        return save_path
+
 def make_prediction(image_path):
-    img = image.load_img(image_path[1:], target_size=(200, 200))  # Resize to match model input
-    img_array = image.img_to_array(img)  # Convert to array
-    img_array = img_array / 255.0  # Normalize pixel values (same as training)
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img = crop_image(image_path[1:])
+    face_path = url_for('get_face_file', filename=img.split('/')[-1])
+    img = image.load_img(img, target_size=(200, 200))
+    img_array = image.img_to_array(img)
+    img_array = img_array / 255.0 
+    img_array = np.expand_dims(img_array, axis=0)
     
     age_pred, gender_pred = model.predict(img_array)
     
-    predicted_age = age_pred[0][0]  # Age is a single value (linear output)
-    gender_prob = gender_pred[0][0]  # Sigmoid output (probability)
-    predicted_gender = "Female" if gender_prob > 0.5 else "Male"  # Gender threshold at 0.5
+    predicted_age = age_pred[0][0]
+    gender_prob = gender_pred[0][0]
+    predicted_gender = "Female" if gender_prob > 0.5 else "Male"
     
-    return {'age':int(predicted_age), 'gender':predicted_gender}
+    return {'age':int(predicted_age), 'gender':predicted_gender, 'faces':face_path}
 
 
 @app.route('/', methods=['GET', 'POST'])
