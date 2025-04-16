@@ -35,6 +35,7 @@ class UploadForm(FlaskForm):
 def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
 
+
 @app.route('/faces/<filename>')
 def get_face_file(filename):
     return send_from_directory(app.config['UPLOADED_FACES_DEST'], filename)
