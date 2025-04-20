@@ -48,8 +48,7 @@ def make_prediction(image_path):
             predicted_age = age_pred[0][0]
             gender_prob = gender_pred[0][0]
             predicted_gender = "Female" if gender_prob > 0.5 else "Male"
-            
-            predictions.append({'age':int(predicted_age), 'gender':predicted_gender})
+            predictions.append({'age':int(predicted_age), 'gender':predicted_gender, 'face':img})
     return predictions
 
 st.title('Age and Gender Detection')
@@ -57,7 +56,7 @@ st.text('It predicts the age and gender of each detected face(s) in an Image.')
 
 uploaded_file = st.file_uploader("Choose an Image", accept_multiple_files=False)
 if uploaded_file:
-    st.image(uploaded_file, caption="Uploaded Image", width=300)
+    st.image(uploaded_file, caption="Uploaded Image", width=200)
 
 enable = st.toggle("Capture from camera")
 
@@ -81,6 +80,20 @@ elif uploaded_file is not None:
         f.write(uploaded_file.read())
 
 if filepath is not None:
-    if st.button("Submit"):
-        predictions = make_prediction(filepath)
-        st.text(predictions)
+    with st.container():
+        if st.button("Submit"):
+            predictions = make_prediction(filepath)
+            num_cols = 5
+
+            for i in range(0, len(predictions), num_cols):
+                row = predictions[i:i + num_cols]
+                cols = st.columns(len(row))
+
+                for col, prediction in zip(cols, row):
+                    with col:
+
+                        st.image(prediction['face'], width=120)
+                        st.markdown(f"**Gender:** {prediction['gender']}")
+                        st.markdown(f"**Age:** {prediction['age']}")
+
+                    
