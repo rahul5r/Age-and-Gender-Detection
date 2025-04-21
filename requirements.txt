@@ -1,7 +1,3 @@
 tensorflow
-pillow
-matplotlib
-flask
-Flask-Uploads
-flask-wtf
 opencv-python
+streamlit
