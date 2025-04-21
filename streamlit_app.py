@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import streamlit as st
 from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
-import pandas as pd
 
 # Load the pre-trained model
 model = load_model('Age_Gender_Classification_model.h5')
