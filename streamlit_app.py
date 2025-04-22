@@ -7,7 +7,6 @@ from tensorflow.keras.models import load_model
 model = load_model('Age_Gender_Classification_model.h5')
 
 def detect_faces(img_array):
-    # Convert to grayscale for face detection
     gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -18,14 +17,13 @@ def detect_faces(img_array):
     for (x, y, w, h) in faces:
         face_crop_bgr = img_array[y:y+h, x:x+w]
         face_crop_rgb = cv2.cvtColor(face_crop_bgr, cv2.COLOR_BGR2RGB)
-        detected_faces.append(face_crop_rgb)  # Store NumPy array of face
+        detected_faces.append(face_crop_rgb)
     return detected_faces
 
 def make_prediction(img_array):
     faces = detect_faces(img_array)
     predictions = []
     for face_rgb in faces:
-        # Resize face to target size (200, 200)
         face_resized = cv2.resize(face_rgb, (200, 200))
         img_array = face_resized / 255.0
         img_array = np.expand_dims(img_array, axis=0)
@@ -38,36 +36,30 @@ def make_prediction(img_array):
         predictions.append({
             'age': int(predicted_age),
             'gender': predicted_gender,
-            'face': face_rgb  # Store original face NumPy array for display
+            'face': face_rgb
         })
     return predictions
 
 st.title('Age and Gender Detection')
 st.text('It predicts the age and gender of each detected face(s) in an Image.')
 
-# File uploader for image
 uploaded_file = st.file_uploader("Choose an Image", accept_multiple_files=False)
 img_array = None
 
 if uploaded_file:
-    # Read uploaded file as NumPy array
     bytes_data = uploaded_file.read()
     np_img = np.frombuffer(bytes_data, np.uint8)
     img_array = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
-    # Display uploaded image
     st.image(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB), caption="Uploaded Image", width=200)
 
-# Camera input
 enable = st.toggle("Capture from camera")
 
 if enable:
     picture = st.camera_input("Take a picture")
     if picture is not None:
-        # Read camera input as NumPy array
         bytes_data = picture.getvalue()
         np_img = np.frombuffer(bytes_data, np.uint8)
         img_array = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
-        # Display captured image
         st.image(cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB), caption="Captured Image", width=200)
 
 if img_array is not None:
@@ -82,7 +74,6 @@ if img_array is not None:
 
                 for col, prediction in zip(cols, row):
                     with col:
-                        # Display face NumPy array as image
                         st.image(prediction['face'], width=120)
                         st.markdown(f"**Gender:** {prediction['gender']}")
                         st.markdown(f"**Age:** {prediction['age']}")
