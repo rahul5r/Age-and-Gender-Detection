@@ -7,8 +7,7 @@ This is a web application that detects faces in uploaded images and predicts the
 ## 🔗 Live Demo
 
 Want to try it out right away?  
-👉 **Check out the Streamlit version here:**  
-[https://age-and-gender-detection-rahul5r.streamlit.app/](https://age-and-gender-detection-rahul5r.streamlit.app/)
+👉 **Check out the Streamlit version here:** [Click here](https://age-and-gender-detection-rahul5r.streamlit.app/)
 
 > No setup needed — just upload your image and see the results in seconds!
 
