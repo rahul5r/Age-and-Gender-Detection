@@ -1,6 +1,16 @@
 # Age and Gender Classification Web App
 
-This is a Flask-based web application that detects faces in uploaded images and predicts the **age** and **gender** of each detected face using a deep learning model built on top of the pre-trained VGG16 architecture.
+This is a web application that detects faces in uploaded images and predicts the **age** and **gender** of each detected face using a deep learning model built on top of the pre-trained VGG16 architecture.
+
+---
+
+## 🔗 Live Demo
+
+Want to try it out right away?  
+👉 **Check out the Streamlit version here:**  
+[https://age-and-gender-detection-rahul5r.streamlit.app/](https://age-and-gender-detection-rahul5r.streamlit.app/)
+
+> No setup needed — just upload your image and see the results in seconds!
 
 ---
 
@@ -23,6 +33,7 @@ The app performs the following:
 - ✅ Predict both age and gender
 - ✅ Clean, user-friendly interface
 - ✅ High accuracy with a lightweight model
+- ✅ **Streamlit version available online**
 
 ---
 
@@ -41,7 +52,7 @@ Final training epoch metrics:
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** HTML/CSS (Flask Templates)
+- **Frontend:** HTML/CSS (Flask Templates), Streamlit
 - **Backend:** Python, Flask
 - **ML Framework:** TensorFlow / Keras
 - **Face Detection:** OpenCV Haar Cascade Classifier
