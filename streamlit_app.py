@@ -67,7 +67,7 @@ if img_array is not None:
         if st.button("Submit"):
             predictions = make_prediction(img_array)
             num_cols = 5
-
+            
             for i in range(0, len(predictions), num_cols):
                 row = predictions[i:i + num_cols]
                 cols = st.columns(len(row))
