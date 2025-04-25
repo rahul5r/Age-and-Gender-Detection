@@ -9,7 +9,6 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
-
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "qwerty"
@@ -80,7 +79,6 @@ def make_prediction(image_path):
         predictions.append({'age':int(predicted_age), 'gender':predicted_gender, 'face':face_path})
     return predictions
 
-
 @app.route('/', methods=['GET', 'POST'])
 def upload_image():
     form = UploadForm()
@@ -95,7 +93,6 @@ def upload_image():
         predictions = None
     
     return render_template('index.html', form=form, file_url=file_url, predictions=predictions)
-
 
 if __name__ == "__main__":
     app.run(debug=True)

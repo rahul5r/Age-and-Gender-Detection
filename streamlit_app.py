@@ -77,3 +77,4 @@ if img_array is not None:
                         st.image(prediction['face'], width=120)
                         st.markdown(f"**Gender:** {prediction['gender']}")
                         st.markdown(f"**Age:** {prediction['age']}")
+
