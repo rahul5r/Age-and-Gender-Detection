@@ -1,4 +1,4 @@
-# Age and Gender Classification Web App
+# Age and Gender Detection Web App
 
 This is a web application that detects faces in uploaded images and predicts the **age** and **gender** of each detected face using a deep learning model built on top of the pre-trained VGG16 architecture.
 
